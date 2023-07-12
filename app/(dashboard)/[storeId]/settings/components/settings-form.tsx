@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlertModal } from "@/components/modals/alert-modal";
 
 interface SettingsFormProps {
   initalData: Store;
@@ -56,8 +57,29 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initalData }) => {
       setLoading(false);
     }
   };
+
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      router.refresh();
+      router.push("/");
+      toast.success("Store Deleted Successfully");
+    } catch (err) {
+      toast.error("Make sure you remove all products and categories first.");
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        loading={loading}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+      />
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store prefernces" />
         <Button
