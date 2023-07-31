@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
-
+import { useOrigin } from "@/hooks/use-origin";
 interface SettingsFormProps {
   initalData: Store;
 }
@@ -40,6 +40,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initalData }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const origin = useOrigin();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
@@ -127,7 +129,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initalData }) => {
       <Separator />
       <ApiAlert
         title="NEXT_PUBLIC_API_URL"
-        description="test-desc"
+        description={`${origin}/api/${params.storeId}`}
         variant="public"
       />
     </>
